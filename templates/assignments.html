@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Invigilation Assignments by Department</h2>
+<form method="get" action="{{ url_for('assignments') }}">
+  <label for="department">Choose a department</label>
+  <select id="department" name="department" required>
+    <option value="">Select department</option>
+    {% for dept in departments %}
+    <option value="{{ dept }}" {% if dept==selected_department %}selected{% endif %}>{{ dept.title() }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Show assignments</button>
+</form>
+
+{% if rows %}
+<div class="actions">
+  <a href="{{ url_for('assignments_pdf') }}?department={{ selected_department }}"><button type="button">Download
+      PDF</button></a>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Course code</th>
+      <th>Course title</th>
+      <th>Venue</th>
+      <th>Department</th>
+      <th>Invigilators</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      <td>{{ row.date }}</td>
+      <td>{{ row.time }}</td>
+      <td>{{ row.course_code }}</td>
+      <td>{{ row.course_title }}</td>
+      <td>{{ row.venue }}</td>
+      <td>{{ row.department }}</td>
+      <td>{{ row.invigilators }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% elif selected_department %}
+<p class="small-note">No assignments were found for that department.</p>
+{% endif %}
+{% endblock %}

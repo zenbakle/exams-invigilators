@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Staff Schedule by Email</h2>
+  <form method="get" action="{{ url_for('staff_schedule') }}">
+    <label for="email">Enter staff email</label>
+    <input id="email" name="email" type="text" placeholder="name@example.com" value="{{ email }}" required>
+    <button type="submit">Show schedule</button>
+  </form>
+
+  {% if rows %}
+    <div class="actions">
+      <a href="{{ url_for('staff_schedule_pdf') }}?email={{ email }}"><button type="button">Download PDF</button></a>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Course code</th>
+          <th>Course title</th>
+          <th>Venue</th>
+          <th>Department</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.date }}</td>
+            <td>{{ row.time }}</td>
+            <td>{{ row.course_code }}</td>
+            <td>{{ row.course_title }}</td>
+            <td>{{ row.venue }}</td>
+            <td>{{ row.department }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% elif email %}
+    <p class="small-note">No schedule rows were found for that email.</p>
+  {% endif %}
+{% endblock %}
